@@ -22,3 +22,6 @@ echo ""
 echo "Find and delete all .tmp files..."
 exec find . -name "*.tmp" -type f -delete
 
+echo ""
+echo "Generate a file of hashes from everything in ./public/"
+exec find ./public/ -type f -exec md5sum "{}" + > ./checklist.chk
