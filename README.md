@@ -118,7 +118,7 @@ To run using docker:
 docker run -it \
   --volume `pwd`/data:/data  \
   --volume `pwd`/website-archiver.yml://config/httrack/website-archiver.yml
-  ivanstegic/website-archiver
+  ten7/website-archiver
 ```
 
 Or, to use the included docker-compose.yml file:

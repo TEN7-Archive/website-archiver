@@ -1,7 +1,7 @@
 version: '3'
 services:
   httrack:
-    image: ivanstegic/website-archiver
+    image: ten7/website-archiver
     volumes:
       - ./data:/data:cached
       - ./website-archiver.yml:/config/httrack/website-archiver.yml
