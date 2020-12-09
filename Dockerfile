@@ -1,12 +1,26 @@
-FROM webdevops/base:alpine
-
+FROM alpine:edge
 MAINTAINER Ivan Stegic code@ivanstegic.com
 
-COPY conf/ /opt/docker/
+# Update the package list and install Ansible.
+RUN apk -U upgrade &&\
+    apk add --update --no-cache ansible && \
+    rm -rf /tmp/* \
+           /var/cache/apk/* \
+           /usr/lib/python3.6/site-packages/ansible/modules/network/ \
+           /usr/lib/python3.6/site-packages/ansible/modules/cloud/ \
+           /usr/lib/python3.6/site-packages/ansible/modules/windows/
 
-RUN apk --no-cache add --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing httrack \
-    && docker-image-cleanup
+# Copy the Ansible configuration files
+COPY ansible-hosts /etc/ansible/hosts
+COPY ansible.cfg /etc/ansible/ansible.cfg
+COPY ansible /ansible
 
-WORKDIR /app
+# Run the build.
+RUN ansible-playbook -i /ansible/inventories/all.ini /ansible/build.yml
 
-CMD ["httrack"]
+# Switch to the service account.
+USER httrack
+
+# Set the entrypoint and default command.
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["/app/httrack.sh"]

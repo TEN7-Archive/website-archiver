@@ -1,0 +1,14 @@
+webarchiver_sites:
+  - site: "https://example.com"
+    dest: "/data/example.com"
+    additional_url_patterns:
+      - "+www.example.com/*"
+    extra_log: yes
+    single_log: yes
+    disable_security_limits: yes
+    update: yes
+    ignore_case: yes
+    max_transfer_rate: 0
+    follow_robot_txt: "never"
+    max_links: 500000
+    include_near_files: yes

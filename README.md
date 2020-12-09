@@ -1,13 +1,138 @@
 # Website Archiver
-An easy way to archive any publicly accessible website locally.
+An easy way to archive any publicly accessible website locally using httrack.
 
-## How to use this archiver
+## Specifying sites
 
-1. Make sure you have [Docker Desktop](https://www.docker.com/get-started) installed on your computer. This has been tested on macOS and Linux, but it should work on Windows too.
-2. Clone the website-archiver repo from [https://github.com/ivanstegic/website-archiver.git](https://github.com/ivanstegic/website-archiver.git)
-3. Edit the `httrack.env` file and replace any instance of the text `example.com` with the domain name of the website you are crawling. This is where you configure the site you're crawling. It's ok to include subfolders here.
-4. Get into a terminal on your computer, and run the file `archive.sh`
-5. All files that are downloaded will be in the `public/` folder of this repo, browse the `index.html` file in there with your browser to see what you crawled.
+This image uses a single YAML file, `website-archiver.yml` to specify which sites to back up and how.
 
-## Tools
-This archiver uses [Docker](https://www.docker.com/) and [HTTrack](http://www.httrack.com) to make a mirror of the site you are trying to archive.
+```yaml
+webarchiver_sites:
+  - site: "https://example.com"
+    dest: "/data/example.com"
+```
+
+Where:
+* **site** is the site URL. Required.
+* **dest** is the path in the container to save the file. Required.
+
+If you want to archive multiple sites, simply add another entry:
+
+```yaml
+webarchiver_sites:
+  - site: "https://example.com"
+    dest: "/data/example.com"
+  - site: "https://mysite.test"
+    dest: "/data/mysite.test"
+
+```
+
+### Specifying additional URL patterns
+
+You may wish to include additional URL patterns along with the `site`. This could be CSS or JS files, media, or even links to alias domains. You can do so with `additional_url_patterns`:
+
+```yaml
+webarchiver_sites:
+  - site: "https://example.com"
+    dest: "/data/example.com"
+    additional_url_patterns:
+      - "+www.example.com/*"
+      - "+*.css"
+      - "+*.js"
+      - "+mime:image/*"
+      - "+mime:video/*"
+      - "+mime:audio/*"
+```
+
+Where:
+
+* **additional_url_patterns** is a list of patterns to include in the archive. Optional, defaults to CSS, JS, and media files.
+
+### Controlling depth
+
+The archiver will attempt to follow all links it finds when backing up a site. You can control this with `max_links`:
+
+```yaml
+webarchiver_sites:
+  - site: "https://example.com"
+    dest: "/data/example.com"
+    max_links: 500000
+```
+
+Where:
+
+* **max_links** The maximum depth of links to back up. Optional, defaults to 500000.
+
+Note, setting this too low can cause the archiver to fail.
+
+### Following robots.txt.
+
+You can instruct the archiver to follow links in robots.txt and meta tags using `follow_robots_txt`:
+
+```yaml
+webarchiver_sites:
+  - site: "https://example.com"
+    dest: "/data/example.com"
+    follow_robot_txt: "never"
+```
+
+Where the value of `follow_robot_txt` is:
+* **never** Never follow. Default.
+* **sometimes** Follow some links. See httrack documentation for more info.
+* **always** Follow even more.
+* **even strict** Follow even strictly disallowed links.
+
+### Other options
+
+You can control the archive further with the following options:
+
+```yaml
+webarchiver_sites:
+  - site: "https://example.com"
+    dest: "/data/example.com"
+    extra_log: yes
+    single_log: yes
+    disable_security_limits: yes
+    update: yes
+    ignore_case: yes
+    max_transfer_rate: 0
+    max_links: 500000
+    include_near_files: yes
+```
+
+Where:
+
+* **extra_log** Write extra information to the log. Optional, defaults to `yes`.
+* **single_log** Write to a single log file per archive. Optional, defaults to `yes`.
+* **disable_security_limits** Bypass internal limits on bandwidth abuse. Optional, defaults to `yes`.
+* **update** Update the existing archive if it was previously taken. Optional, defaults to `yes`.
+* **ignore_case** Ignore URL and link case when archiving. Optional, defaults to `yes`.
+* **max_transfer_rate** The maximum transfer rate in bytes/sec. Optional, defaults to no limit.
+
+## Using this image
+
+You can run this image in several ways. First, create `website-archiver.yml` using the `website-archiver.yml.example` file as a template.
+
+To run using docker:
+
+```shell
+docker run -it \
+  --volume `pwd`/data:/data  \
+  --volume `pwd`/website-archiver.yml://config/httrack/website-archiver.yml
+  ivanstegic/website-archiver
+```
+
+Or, to use the included docker-compose.yml file:
+
+```shell
+docker-compose run httrack
+```
+
+## Debugging
+
+This container uses [Ansible](https://www.ansible.com/) to perform start-up tasks. To get even more verbose output from the start up scripts, set the `ANSIBLE_VERBOSITY` environment variable to `4`.
+
+If the container will not start due to a failure of the entrypoint, set the `WEBARCHIVER_SKIP_ENTRYPOINT` environment variable to `true` or `1`, then restart the container.
+
+## License
+
+Website Archiver is licensed under GPLv3. See [LICENSE](https://github.com/ivanstegic/website-archiver/blob/main/LICENSE) for the complete language.

@@ -1,0 +1,21 @@
+#!/bin/bash
+set -me
+
+SCRIPT_NAME=`basename "$0"`
+WEBARCHIVER_SKIP_ENTRYPOINT=${WEBARCHIVER_SKIP_ENTRYPOINT:-false}
+
+echo "$SCRIPT_NAME: Beginning initialization..."
+
+case ${WEBARCHIVER_SKIP_ENTRYPOINT,,} in
+  true|1)
+    echo "$SCRIPT_NAME: Skipping entrypoint. Starting container..."
+    exec "$@"
+    exit $?
+    ;;
+esac
+
+{{ webarchiver_run_commands }}
+
+echo "$SCRIPT_NAME: Initialization complete. Starting container..."
+
+exec "$@"

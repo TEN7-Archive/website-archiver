@@ -1,0 +1,31 @@
+---
+webarchiver_group: "httrack"
+webarchiver_user: "httrack"
+webarchiver_home: "/home/httrack"
+
+webarchiver_root_prompt: '\u@website-archiver:\w# '
+webarchiver_user_prompt: '\u@website-archiver:\w$ '
+
+webarchiver_run_commands: |
+  if [ -f "/config/httrack/website-archiver.yml" ]; then
+    ansible-playbook -i /ansible/inventories/all.ini -e "@/config/httrack/website-archiver.yml" /ansible/run.yml
+  else
+    ansible-playbook -i /ansible/inventories/all.ini /ansible/run.yml
+  fi
+
+webarchiver_default:
+  additional_url_patterns:
+    - "+*.css"
+    - "+*.js"
+    - "+mime:image/*"
+    - "+mime:video/*"
+    - "+mime:audio/*"
+  extra_log: yes
+  single_log: yes
+  disable_security_limits: yes
+  update: yes
+  ignore_case: yes
+  max_transfer_rate: 0
+  follow_robot_txt: "never"
+  max_links: 500000
+  include_near_files: yes

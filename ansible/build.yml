@@ -1,0 +1,116 @@
+---
+- hosts: webarchiver
+  tasks:
+    - name: Create groups.
+      shell: >
+        addgroup {{ webarchiver_group }}
+
+    - name: Create the service account
+      shell: >
+        adduser -G {{ webarchiver_group }}
+        -D
+        -h {{ webarchiver_home }}
+        -s /bin/bash
+        {{ webarchiver_user }}
+
+    - name: Install needed software
+      apk:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - "bash"
+      notify:
+        - clear apk cache
+
+    - name: Install httrack
+      apk:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+        repository: http://dl-cdn.alpinelinux.org/alpine/edge/testing
+      loop:
+        - "httrack"
+      notify:
+        - clear apk cache
+
+    - name: Deploy key scripts
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "root"
+        group: "root"
+        mode: "u=rx,g=rx,o=rx"
+      loop:
+        - src: "templates/docker-entrypoint.sh.j2"
+          dest: "/usr/local/bin/docker-entrypoint.sh"
+        - src: "templates/motd.j2"
+          dest: "/etc/motd"
+        - src: "templates/vim.j2"
+          dest: "/usr/bin/vim"
+
+    - name: Write the root .bashrc file
+      copy:
+        dest: "/root/.bashrc"
+        content: |
+          PS1="{{ webarchiver_root_prompt }}"
+        owner: "root"
+        group: "root"
+        mode: "u=rx,g=rx,o="
+
+    - name: Write the service account .bashrc file
+      copy:
+        dest: "/home/httrack/.bashrc"
+        content: |
+          PS1="{{ webarchiver_user_prompt }}"
+          cd $HOME
+          cat /etc/motd
+        owner: "{{ webarchiver_user }}"
+        group: "{{ webarchiver_group }}"
+        mode: "u=rx,g=rx,o="
+
+    - name: Write the service account .bash_profile file
+      copy:
+        dest: "/home/httrack/.bash_profile"
+        content: |
+          PS1="{{ webarchiver_user_prompt }}"
+          cd $HOME
+          cat /etc/motd
+        owner: "{{ webarchiver_user }}"
+        group: "{{ webarchiver_group }}"
+        mode: "u=rx,g=rx,o="
+
+    - name: Create /data directory
+      file:
+        path: "/data"
+        state: directory
+        owner: "{{ webarchiver_user }}"
+        group: "{{ webarchiver_group }}"
+        mode: "u=rw,g=rw,o="
+
+    - name: Create the /app directory
+      file:
+        path: "/app"
+        state: directory
+        owner: "{{ webarchiver_user }}"
+        group: "{{ webarchiver_group }}"
+        recurse: yes
+        mode: "u=rwx,g=rwx,o="
+
+    - name: Create httrack.sh
+      file:
+        path: "/app/httrack.sh"
+        state: touch
+        owner: "{{ webarchiver_user }}"
+        group: "{{ webarchiver_group }}"
+        mode: "u=rwx,g=rx,o="
+
+
+  handlers:
+    - name: clear apk cache
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/tmp/*"
+        - "/var/cache/apk/*"
