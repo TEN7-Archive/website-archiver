@@ -25,6 +25,11 @@
               --advanced-maxlinks={{ _site.max_links | default(webarchiver_default.max_links) }} \
               {% if _site.include_near_files | default(webarchiver_default.include_near_files) %}--near{% endif %}
 
+              echo "Clearing *.tmp files..."
+              find {{ _site.dest }} -name "*.tmp" -type f -delete
+              echo "Generating checksum file..."
+              find {{ _site.dest }} -type f -exec md5sum "{}" + > {{ _site.dest }}/checklist.chk
+              echo "Done with {{ _site.site }}"
           {% endfor %}
           echo "Backup(s) complete!"
         dest: "/app/httrack.sh"
