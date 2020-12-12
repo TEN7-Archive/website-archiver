@@ -28,14 +28,14 @@ webarchiver_sites:
 
 ### Specifying additional URL patterns
 
-You may wish to include additional URL patterns along with the `site`. This could be CSS or JS files, media, or even links to alias domains. You can do so with `additional_url_patterns`:
+You may wish to include additional URL patterns along with the `site`. This could be CSS or JS files or media files. You can do so with `additional_url_patterns`:
 
 ```yaml
 webarchiver_sites:
   - site: "https://example.com"
     dest: "/data/example.com"
     additional_url_patterns:
-      - "+www.example.com/*"
+      - "+example.com/*"
       - "+*.css"
       - "+*.js"
       - "+mime:image/*"
