@@ -2,7 +2,7 @@ webarchiver_sites:
   - site: "https://example.com"
     dest: "/data/example.com"
     additional_url_patterns:
-      - "+www.example.com/*"
+      - "+https://example.com/*"
     extra_log: yes
     single_log: yes
     disable_security_limits: yes
