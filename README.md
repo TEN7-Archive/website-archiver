@@ -28,14 +28,14 @@ webarchiver_sites:
 
 ### Specifying additional URL patterns
 
-You may wish to include additional URL patterns along with the `site`. This could be CSS or JS files or media files. You can do so with `additional_url_patterns`:
+You may wish to include additional URL patterns along with the `site`. This could be CSS or JS files or media files. Do so with `additional_url_patterns`:
 
 ```yaml
 webarchiver_sites:
   - site: "https://example.com"
     dest: "/data/example.com"
     additional_url_patterns:
-      - "+example.com/*"
+      - "+https://example.com/*"
       - "+*.css"
       - "+*.js"
       - "+mime:image/*"
@@ -46,6 +46,20 @@ webarchiver_sites:
 Where:
 
 * **additional_url_patterns** is a list of patterns to include in the archive. Optional, defaults to CSS, JS, and media files.
+
+You may also restrict your crawl to a folder of the `site` by including it in `additional_url_patterns`. For example, to craw only the URL `https://example.com/folder` and any page therein:
+
+```yaml
+  - site: "https://example.com/folder"
+    dest: "/data/example.com"
+    additional_url_patterns:
+      - "+https://example.com/folder/*"
+      - "+*.css"
+      - "+*.js"
+      - "+mime:image/*"
+      - "+mime:video/*"
+      - "+mime:audio/*"
+```
 
 ### Controlling depth
 
