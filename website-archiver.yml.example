@@ -3,6 +3,11 @@ webarchiver_sites:
     dest: "/data/example.com"
     additional_url_patterns:
       - "+https://example.com/*"
+      - "+*.css"
+      - "+*.js"
+      - "+mime:image/*"
+      - "+mime:video/*"
+      - "+mime:audio/*"      
     extra_log: yes
     single_log: yes
     disable_security_limits: yes
