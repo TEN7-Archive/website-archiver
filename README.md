@@ -107,7 +107,6 @@ webarchiver_sites:
     single_log: yes
     disable_security_limits: yes
     update: yes
-    ignore_case: yes
     max_transfer_rate: 0
     max_links: 500000
     include_near_files: yes
@@ -119,7 +118,6 @@ Where:
 * **single_log** Write to a single log file per archive. Optional, defaults to `yes`.
 * **disable_security_limits** Bypass internal limits on bandwidth abuse. Optional, defaults to `yes`.
 * **update** Update the existing archive if it was previously taken. Optional, defaults to `yes`.
-* **ignore_case** Ignore URL and link case when archiving. Optional, defaults to `yes`.
 * **max_transfer_rate** The maximum transfer rate in bytes/sec. Optional, defaults to no limit.
 
 ## Using this image

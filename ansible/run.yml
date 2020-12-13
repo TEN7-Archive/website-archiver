@@ -8,27 +8,35 @@
 
           {% for _site in webarchiver_sites | default([]) %}
             {% set _follow = _site.follow_robot_txt | default(webarchiver_default.follow_robot_txt) %}
-            echo "Starting backup of {{ _site.site }}..."
-            httrack "{{ _site.site }}" \
-              --path "{{ _site.dest }}" \
-              {{ _site.additional_url_patterns | default([]) | join(' ') }} \
-              {% if _site.extra_log | default(webarchiver_default.extra_log) %}--extra-log{% endif %} \
-              {% if _site.single_log | default(webarchiver_default.single_log) %}--single-log{% endif %} \
-              {% if _site.disable_security_limits | default(webarchiver_default.disable_security_limits) %}--disable-security-limits{% endif %} \
-              {% if _site.update | default(webarchiver_default.update) %}--update{% endif %} \
-              {% if _site.ignore_case | default(webarchiver_default.ignore_case) %}-i{% endif %} \
-              --max-rate={{ _site.max_transfer_rate | default(webarchiver_default.max_transfer_rate) }} \
-              {% if _follow == "never" %}--robots=0 \
-              {% elif _follow == "sometimes" %}--robots=1 \
-              {% elif _follow == "always" %}--robots=2 \
-              {% elif _follow == "even strict" %}--robots=3 \{% endif %}
-              --advanced-maxlinks={{ _site.max_links | default(webarchiver_default.max_links) }} \
-              {% if _site.include_near_files | default(webarchiver_default.include_near_files) %}--near{% endif %}
+              echo
+              echo "Starting backup of {{ _site.site }}..."
+              echo
+              httrack --version
+              echo
+              httrack "{{ _site.site }}" \
+                --path "{{ _site.dest }}" \
+                {{ _site.additional_url_patterns | default([]) | join(' ') }} \
+                {% if _site.extra_log | default(webarchiver_default.extra_log) %}--extra-log{% endif %} \
+                {% if _site.single_log | default(webarchiver_default.single_log) %}--single-log{% endif %} \
+                {% if _site.disable_security_limits | default(webarchiver_default.disable_security_limits) %}--disable-security-limits{% endif %} \
+                -N{{ _site.max_transfer_rate | default(webarchiver_default.max_transfer_rate) }} \
+                {% if _follow == "never" %}--robots=0 \
+                {% elif _follow == "sometimes" %}--robots=1 \
+                {% elif _follow == "always" %}--robots=2 \
+                {% elif _follow == "even strict" %}--robots=3 \{% endif %}
+                --advanced-maxlinks={{ _site.max_links | default(webarchiver_default.max_links) }} \
+                {% if _site.include_near_files | default(webarchiver_default.include_near_files) %}--near{% endif %}
 
+
+              echo
               echo "Clearing *.tmp files..."
+              echo
               find {{ _site.dest }} -name "*.tmp" -type f -delete
+              echo
               echo "Generating checksum file..."
+              echo
               find {{ _site.dest }} -type f -exec md5sum "{}" + > {{ _site.dest }}/checklist.chk
+              echo
               echo "Done with {{ _site.site }}"
           {% endfor %}
           echo "Backup(s) complete!"

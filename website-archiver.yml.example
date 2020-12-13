@@ -12,7 +12,6 @@ webarchiver_sites:
     single_log: yes
     disable_security_limits: yes
     update: yes
-    ignore_case: yes
     max_transfer_rate: 0
     follow_robot_txt: "never"
     max_links: 500000
