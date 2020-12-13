@@ -1,5 +1,5 @@
 # Website Archiver
-An easy way to archive any publicly accessible website locally using httrack.
+An easy way to archive any publicly accessible website locally using [Docker](https://docker.com/) and [HTTrack](https://www.httrack.com/).
 
 ## Specifying sites
 
