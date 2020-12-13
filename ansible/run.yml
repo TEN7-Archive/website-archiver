@@ -33,7 +33,7 @@
               echo
               find {{ _site.dest }} -name "*.tmp" -type f -delete
               echo
-              echo "Generating checksum file..."
+              echo "Generating checksum file {{ _site.dest }}/checklist.chk"
               echo
               find {{ _site.dest }} -type f -exec md5sum "{}" + > {{ _site.dest }}/checklist.chk
               echo
