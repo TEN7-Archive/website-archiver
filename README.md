@@ -15,16 +15,6 @@ Where:
 * **site** is the site URL. Required.
 * **dest** is the path in the container to save the file. Required.
 
-If you want to archive multiple sites, simply add another entry:
-
-```yaml
-webarchiver_sites:
-  - site: "https://example.com"
-    dest: "/data/example.com"
-  - site: "https://mysite.test"
-    dest: "/data/mysite.test"
-
-```
 
 ### Specifying additional URL patterns
 
