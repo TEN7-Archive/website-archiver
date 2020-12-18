@@ -26,7 +26,12 @@
                 {% elif _follow == "even strict" %}--robots=3 \{% endif %}
                 --advanced-maxlinks={{ _site.max_links | default(webarchiver_default.max_links) }} \
                 {% if _site.include_near_files | default(webarchiver_default.include_near_files) %}--near{% endif %}
+              
+
               echo
+              echo "The following command was executed to create the archive:"
+              echo
+              head -3 {{ _site.dest }}/hts-log.txt
               echo
               echo "Clearing *.tmp files..."
               echo
@@ -37,6 +42,9 @@
               find {{ _site.dest }} -type f -exec md5sum "{}" + > {{ _site.dest }}/checklist.txt
               echo
               echo "Done with {{ _site.site }}"
+              echo
+              echo "*******************************************"
+              echo
           {% endfor %}
           echo
           echo "Archiving complete!"
