@@ -146,6 +146,10 @@ This container uses [Ansible](https://www.ansible.com/) to perform start-up task
 
 If the container will not start due to a failure of the entrypoint, set the `WEBARCHIVER_SKIP_ENTRYPOINT` environment variable to `true` or `1`, then restart the container.
 
+## Hosting a pages site on Gitlab
+
+There is an example `.gitlab-ci.yml` file named `.gitlab-ci.yml.example` that can be used to host a site archived into the default `/public` folder using [Gitlab Pages](https://about.gitlab.com/stages-devops-lifecycle/pages/). Simply copy the file and push your repo to Gitlab and you'll be set.
+
 ## License
 
 Website Archiver is licensed under GPLv3. See `LICENSE` for the complete language.
