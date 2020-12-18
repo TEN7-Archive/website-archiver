@@ -80,9 +80,9 @@
         group: "{{ webarchiver_group }}"
         mode: "u=rx,g=rx,o="
 
-    - name: Create /data directory
+    - name: Create output directory
       file:
-        path: "/data"
+        path: "/public"
         state: directory
         owner: "{{ webarchiver_user }}"
         group: "{{ webarchiver_group }}"

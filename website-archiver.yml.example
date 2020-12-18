@@ -1,8 +1,25 @@
 webarchiver_sites:
   - site: "https://example.com"
-    dest: "/data/example.com"
+    dest: "/public/example.com"
     additional_url_patterns:
       - "+https://example.com/*"
+      - "+*.css"
+      - "+*.js"
+      - "+mime:image/*"
+      - "+mime:video/*"
+      - "+mime:audio/*"      
+    extra_log: yes
+    single_log: yes
+    disable_security_limits: yes
+    update: yes
+    max_transfer_rate: 0
+    follow_robot_txt: "never"
+    max_links: 500000
+    include_near_files: yes
+  - site: "https://example.net"
+    dest: "/public/example.net"
+    additional_url_patterns:
+      - "+https://example.net/*"
       - "+*.css"
       - "+*.js"
       - "+mime:image/*"

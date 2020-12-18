@@ -8,7 +8,7 @@ This image uses a single YAML file, `website-archiver.yml` to specify which site
 ```yaml
 webarchiver_sites:
   - site: "https://example.com"
-    dest: "/data/example.com"
+    dest: "/public/example.com"
 ```
 
 Where:
@@ -20,9 +20,9 @@ If you want to archive multiple sites, simply add another entry:
 ```yaml
 webarchiver_sites:
   - site: "https://example.com"
-    dest: "/data/example.com"
-  - site: "https://mysite.test"
-    dest: "/data/mysite.test"
+    dest: "/public/example.com"
+  - site: "https://example.net"
+    dest: "/public/example.net"
 
 ```
 
@@ -34,7 +34,7 @@ You may wish to include additional URL patterns along with the `site`. This coul
 ```yaml
 webarchiver_sites:
   - site: "https://example.com"
-    dest: "/data/example.com"
+    dest: "/public/example.com"
     additional_url_patterns:
       - "+https://example.com/*"
       - "+*.css"
@@ -52,7 +52,7 @@ You may also restrict your crawl to a folder of the `site` by including it in `a
 
 ```yaml
   - site: "https://example.com/folder"
-    dest: "/data/example.com"
+    dest: "/public/example.com"
     additional_url_patterns:
       - "+https://example.com/folder/*"
       - "+*.css"
@@ -69,7 +69,7 @@ The archiver will attempt to follow all links it finds when backing up a site. Y
 ```yaml
 webarchiver_sites:
   - site: "https://example.com"
-    dest: "/data/example.com"
+    dest: "/public/example.com"
     max_links: 500000
 ```
 
@@ -86,7 +86,7 @@ You can instruct the archiver to follow links in robots.txt and meta tags using 
 ```yaml
 webarchiver_sites:
   - site: "https://example.com"
-    dest: "/data/example.com"
+    dest: "/public/example.com"
     follow_robot_txt: "never"
 ```
 
@@ -103,7 +103,7 @@ You can control the archive further with the following options:
 ```yaml
 webarchiver_sites:
   - site: "https://example.com"
-    dest: "/data/example.com"
+    dest: "/public/example.com"
     extra_log: yes
     single_log: yes
     disable_security_limits: yes
@@ -129,7 +129,7 @@ To run using docker:
 
 ```shell
 docker run -it \
-  --volume `pwd`/data:/data  \
+  --volume `pwd`/public:/public  \
   --volume `pwd`/website-archiver.yml://config/httrack/website-archiver.yml
   ten7/website-archiver
 ```
@@ -148,4 +148,4 @@ If the container will not start due to a failure of the entrypoint, set the `WEB
 
 ## License
 
-Website Archiver is licensed under GPLv3. See [LICENSE](https://github.com/ivanstegic/website-archiver/blob/main/LICENSE) for the complete language.
+Website Archiver is licensed under GPLv3. See `LICENSE` for the complete language.
