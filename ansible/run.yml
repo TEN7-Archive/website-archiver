@@ -27,6 +27,7 @@
                 --advanced-maxlinks={{ _site.max_links | default(webarchiver_default.max_links) }} \
                 {% if _site.include_near_files | default(webarchiver_default.include_near_files) %}--near{% endif %}
               echo
+              echo
               echo "Clearing *.tmp files..."
               echo
               find {{ _site.dest }} -name "*.tmp" -type f -delete
@@ -37,6 +38,7 @@
               echo
               echo "Done with {{ _site.site }}"
           {% endfor %}
+          echo
           echo "Archiving complete!"
         dest: "/app/httrack.sh"
         owner: "{{ webarchiver_user }}"
